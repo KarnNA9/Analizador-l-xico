@@ -1,4 +1,4 @@
-%option noyywrap // NO QUITAR
+%option noyywrap
 %{
 #include <stdio.h>
 
@@ -11,6 +11,9 @@
 #define id 406
 #define assign 407
 #define plus 408
+#define subtraction 409
+#define multiplication 410
+#define division 411
 
 extern FILE *yyin; 
 %}
@@ -22,10 +25,13 @@ i                       { return intdcl; }
 [0-9]+\.[0-9]+       |
 \.[0-9]+                { return fnum; }
 [0-9]+                  { return inum; }
-print                   { return print; }
+p                       { return print; }
 [a-zA-Z]                { return id; }
 =                       { return assign; }
 \+                      { return plus; }
+\-                      { return subtraction; }
+\*                      { return multiplication; }
+\/                      { return division; }
 \n                      { return '\n'; }
 %%
 
@@ -37,20 +43,20 @@ int main(int argc, char *argv[])
 
     yyin = fopen("entrada.txt", "r");
     if (!yyin) {
-        perror("No se pudo abrir entrada.txt");
+        perror("No se pudo abrir el arhivo de entrada");
         return 1;
     }
 
     out = fopen("salida.txt", "w");
     if (!out) {
-        perror("No se pudo abrir salida.txt");
+        perror("No se pudo abrir el arhivo de salida");
         fclose(yyin);
         return 1;
     }
 
     while ((val = yylex())) {
         if (val == '\n') {
-            fprintf(out, "\n"); // Cuando veas un salto de línea, escribe uno
+            fprintf(out, "\n"); 
             continue;
         }
         switch (val) {
@@ -74,6 +80,15 @@ int main(int argc, char *argv[])
                 break;
             case plus:
                 fprintf(out, "plus ");
+                break;
+            case subtraction:
+                fprintf(out, "subtraction ");
+                break;
+            case multiplication:
+                fprintf(out, "multiplication ");
+                break;
+            case division:
+                fprintf(out, "division ");
                 break;
             case print:
                 fprintf(out, "print ");
