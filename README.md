@@ -62,7 +62,7 @@ COMMENT
 id assign id plus fnum 
 
 COMMENT 
-id id 
+print id 
 ```
 
 
